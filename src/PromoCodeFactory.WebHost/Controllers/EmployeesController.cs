@@ -70,5 +70,26 @@ namespace PromoCodeFactory.WebHost.Controllers
 
             return employeeModel;
         }
+
+        /// <summary>
+        /// Создать сотрудника
+        /// </summary>
+        /// <param name="dto"></param>
+        /// <returns></returns>
+        [HttpPost]
+        public async Task<ActionResult> CreateEmployeeAsync(EmployeeRequest dto)
+        {
+            var employee = new Employee()
+            {
+                Id = Guid.NewGuid(),
+                FirstName = dto.FirstName,
+                LastName = dto.LastName,
+                Email = dto.Email,
+                AppliedPromocodesCount = dto.AppliedPromocodesCount,
+            };
+
+            await _employeeRepository.CreateAsync(employee);
+            return Created();
+        }
     }
 }
