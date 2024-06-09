@@ -132,6 +132,7 @@ namespace PromoCodeFactory.WebHost.Controllers
         /// <returns>
         /// <list type="table">
         /// <item><c>200</c> и обновленная модель сотрудника. </item>
+        /// <item><c>400> и сообщение об ошибке. </c></item>
         /// </list>
         /// </returns>
         [HttpPost("update")]
