@@ -1,8 +1,8 @@
-﻿using System;
-
-namespace PromoCodeFactory.Core.Domain
+﻿namespace PromoCodeFactory.Core.Domain
 {
-    public abstract  class BaseEntity
+    using System;
+
+    public abstract class BaseEntity
     {
         public Guid Id { get; set; }
     }
