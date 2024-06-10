@@ -55,11 +55,13 @@ namespace PromoCodeFactory.WebHost.Controllers
             if (employee == null)
                 return NotFound();
 
+            var roles = employee.Roles ?? Enumerable.Empty<Role>();
+
             var employeeModel = new EmployeeResponse()
             {
                 Id = employee.Id,
                 Email = employee.Email,
-                Roles = employee.Roles.Select(x => new RoleItemResponse()
+                Roles = roles.Select(x => new RoleItemResponse()
                 {
                     Name = x.Name,
                     Description = x.Description
