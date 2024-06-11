@@ -79,7 +79,7 @@ namespace PromoCodeFactory.WebHost.Controllers
         /// <param name="dto"></param>
         /// <returns></returns>
         [HttpPost]
-        public async Task<ActionResult> CreateEmployeeAsync(EmployeeCreateDto dto)
+        public async Task<ActionResult> CreateAsync([FromBody] EmployeeCreateDto dto)
         {
             var employee = new Employee()
             {
@@ -93,5 +93,30 @@ namespace PromoCodeFactory.WebHost.Controllers
             await _employeeRepository.CreateAsync(employee);
             return Created();
         }
+
+        [HttpPut("{id:guid}")]
+        public async Task<ActionResult> UpdateAsync(Guid id, [FromBody] EmployeeCreateDto dto)
+        {
+            var employee = new Employee()
+            {
+                Id = id,
+                FirstName = dto.FirstName,
+                LastName = dto.LastName,
+                Email = dto.Email,
+                AppliedPromocodesCount = dto.AppliedPromocodesCount,
+            };
+
+            await _employeeRepository.UpdateAsync(id, employee);
+            return Ok();
+        }
+
+        [HttpDelete("{id:Guid}")]
+        public async Task<ActionResult> DeleteAsync(Guid id)
+        {
+            await _employeeRepository.DeleteAsync(id);
+            return Ok();
+        }
+
+
     }
 }
