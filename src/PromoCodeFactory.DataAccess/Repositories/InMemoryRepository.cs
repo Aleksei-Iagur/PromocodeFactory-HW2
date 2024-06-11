@@ -6,7 +6,7 @@ using PromoCodeFactory.Core.Abstractions.Repositories;
 using PromoCodeFactory.Core.Domain;
 namespace PromoCodeFactory.DataAccess.Repositories
 {
-    public class InMemoryRepository<T>: IRepository<T> where T: BaseEntity
+    public class InMemoryRepository<T> : IRepository<T> where T: BaseEntity
     {
         protected IEnumerable<T> Data { get; set; }
 
@@ -23,6 +23,33 @@ namespace PromoCodeFactory.DataAccess.Repositories
         public Task<T> GetByIdAsync(Guid id)
         {
             return Task.FromResult(Data.FirstOrDefault(x => x.Id == id));
+        }
+
+        public async Task Add(T entity)
+        {
+            Data = Data.Append(entity);
+        }
+
+        public async Task Delete(Guid id)
+        {
+            var entityForRemove = Data.FirstOrDefault(x => x.Id == id);
+            if (entityForRemove is null)
+                throw new Exception("Not Found");
+
+            Data = Data.Where(x => x.Id != entityForRemove.Id);
+        }
+
+        public async Task Update(Guid id, T entity)
+        {
+            try
+            {
+                await Delete(id);
+                await Add(entity);
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
         }
     }
 }

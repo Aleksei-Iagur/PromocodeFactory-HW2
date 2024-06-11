@@ -1,7 +1,7 @@
-﻿using System;
-
-namespace PromoCodeFactory.WebHost.Models
+﻿namespace PromoCodeFactory.WebHost.Models
 {
+    using System;
+
     public class EmployeeShortResponse
     {
         public Guid Id { get; set; }

@@ -1,8 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace PromoCodeFactory.WebHost.Models
+﻿namespace PromoCodeFactory.WebHost.Models
 {
+    using System;
+    using System.Collections.Generic;
+
     public class EmployeeResponse
     {
         public Guid Id { get; set; }
