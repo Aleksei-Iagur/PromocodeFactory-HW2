@@ -9,7 +9,7 @@ using PromoCodeFactory.WebHost.Models;
 namespace PromoCodeFactory.WebHost.Controllers
 {
     /// <summary>
-    /// Роли сотрудников
+    ///     Роли сотрудников
     /// </summary>
     [ApiController]
     [Route("api/v1/[controller]")]
@@ -23,9 +23,8 @@ namespace PromoCodeFactory.WebHost.Controllers
         }
 
         /// <summary>
-        /// Получить все доступные роли сотрудников
+        ///     Получить все доступные роли сотрудников
         /// </summary>
-        /// <returns></returns>
         [HttpGet]
         public async Task<List<RoleItemResponse>> GetRolesAsync()
         {

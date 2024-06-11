@@ -1,74 +1,110 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using PromoCodeFactory.Core.Abstractions.Repositories;
-using PromoCodeFactory.Core.Domain.Administration;
-using PromoCodeFactory.WebHost.Models;
-
-namespace PromoCodeFactory.WebHost.Controllers
+﻿namespace PromoCodeFactory.WebHost.Controllers
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Threading.Tasks;
+    using AutoMapper;
+    using Microsoft.AspNetCore.Mvc;
+    using PromoCodeFactory.Core.Abstractions.Repositories;
+    using PromoCodeFactory.Core.Domain.Administration;
+    using PromoCodeFactory.WebHost.Models;
+    using PromoCodeFactory.WebHost.Models.ModelsIn;
+    using PromoCodeFactory.Core.Abstractions.Servises;
+
     /// <summary>
-    /// Сотрудники
+    ///     Сотрудники
     /// </summary>
     [ApiController]
     [Route("api/v1/[controller]")]
     public class EmployeesController : ControllerBase
     {
-        private readonly IRepository<Employee> _employeeRepository;
+        private readonly IEmployeeService _employeeService;
+        private readonly IMapper _mapper;
 
-        public EmployeesController(IRepository<Employee> employeeRepository)
+        public EmployeesController(IMapper mapper, IEmployeeService employeeService)
         {
-            _employeeRepository = employeeRepository;
+            _mapper = mapper;
+            _employeeService = employeeService;
         }
 
         /// <summary>
-        /// Получить данные всех сотрудников
+        ///     Получить данные всех сотрудников
         /// </summary>
-        /// <returns></returns>
         [HttpGet]
         public async Task<List<EmployeeShortResponse>> GetEmployeesAsync()
         {
-            var employees = await _employeeRepository.GetAllAsync();
+            var employees = await _employeeService.GetEmployeesAsync();
 
-            var employeesModelList = employees.Select(x =>
-                new EmployeeShortResponse()
-                {
-                    Id = x.Id,
-                    Email = x.Email,
-                    FullName = x.FullName,
-                }).ToList();
+            var employeesModelList = _mapper.Map<List<EmployeeShortResponse>>(employees);
 
             return employeesModelList;
         }
 
         /// <summary>
-        /// Получить данные сотрудника по Id
+        ///     Получить данные сотрудника по Id
         /// </summary>
-        /// <returns></returns>
         [HttpGet("{id:guid}")]
         public async Task<ActionResult<EmployeeResponse>> GetEmployeeByIdAsync(Guid id)
         {
-            var employee = await _employeeRepository.GetByIdAsync(id);
+            var employee = await _employeeService.GetById(id);
 
             if (employee == null)
                 return NotFound();
 
-            var employeeModel = new EmployeeResponse()
-            {
-                Id = employee.Id,
-                Email = employee.Email,
-                Roles = employee.Roles.Select(x => new RoleItemResponse()
-                {
-                    Name = x.Name,
-                    Description = x.Description
-                }).ToList(),
-                FullName = employee.FullName,
-                AppliedPromocodesCount = employee.AppliedPromocodesCount
-            };
+            var employeeModel = _mapper.Map<EmployeeResponse>(employee);
 
             return employeeModel;
+        }
+
+        /// <summary>
+        ///    Добавить нового сотрудника 
+        /// </summary>
+        [HttpPost("createEmployee")]
+        public async Task<IActionResult> CreateEmployee(EmployeeForCreateDto employForCreate)
+        {
+            var employee = _mapper.Map<Employee>(employForCreate);
+
+            var id = await _employeeService.CreateEmployee(employee);
+
+            return Ok(id);
+        }
+
+        /// <summary>
+        ///    Обновить сотрудника
+        /// </summary>
+        [HttpPut("UpdateEmployee/{id:guid}")]
+        public async Task<IActionResult> UpdateEmployee(Guid id, EmployeeForCreateDto employForCreate)
+        {
+            try
+            {
+                var employee = _mapper.Map<Employee>(employForCreate);
+
+                await _employeeService.UpdateEmployee(id, employee);
+
+                return Ok(employee.Id);
+            }
+            catch (Exception)
+            {
+                return NotFound();
+            }
+        }
+
+        /// <summary>
+        ///    Удалить сотрудника
+        /// </summary>
+        [HttpDelete("{id:guid}")]
+        public async Task<IActionResult> RemoveEmployee(Guid id)
+        {
+            try
+            {
+                await _employeeService.DeleteEmployee(id);
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return NotFound();
+            }
         }
     }
 }
