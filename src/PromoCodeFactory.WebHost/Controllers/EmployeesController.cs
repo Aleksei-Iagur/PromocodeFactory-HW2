@@ -106,14 +106,38 @@ namespace PromoCodeFactory.WebHost.Controllers
                 AppliedPromocodesCount = dto.AppliedPromocodesCount,
             };
 
-            await _employeeRepository.UpdateAsync(id, employee);
+            try
+            {
+                await _employeeRepository.UpdateAsync(id, employee);
+            }
+            catch (ArgumentNullException ex)
+            {
+                return NotFound();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest();
+            }
+
             return Ok();
         }
 
         [HttpDelete("{id:Guid}")]
         public async Task<ActionResult> DeleteAsync(Guid id)
         {
-            await _employeeRepository.DeleteAsync(id);
+            try
+            {
+                await _employeeRepository.DeleteAsync(id);
+            }
+            catch (ArgumentNullException ex)
+            {
+                return NotFound();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest();
+            }
+
             return Ok();
         }
 

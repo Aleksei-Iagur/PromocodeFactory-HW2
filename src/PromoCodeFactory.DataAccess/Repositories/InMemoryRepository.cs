@@ -32,8 +32,8 @@ namespace PromoCodeFactory.DataAccess.Repositories
         }
 
         public Task UpdateAsync(Guid id, T entity)
-        {            
-            var model = GetByIdAsync(id).Result;
+        {
+            var model = GetByIdAsync(id).Result ?? throw new ArgumentNullException();
             foreach(var prop in model.GetType().GetProperties().Where(x => x.CanWrite))
             {
                 var propDto = entity.GetType().GetProperty(prop.Name);
@@ -45,7 +45,7 @@ namespace PromoCodeFactory.DataAccess.Repositories
 
         public Task DeleteAsync(Guid id)
         {
-            var model = GetByIdAsync(id).Result;
+            var model = GetByIdAsync(id).Result ?? throw new ArgumentNullException();
             var tempData = Data.ToList();
             tempData.Remove(model);
             Data = tempData;
