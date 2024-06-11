@@ -25,7 +25,6 @@ namespace PromoCodeFactory.WebHost.Controllers
         /// <summary>
         ///     Получить все доступные роли сотрудников
         /// </summary>
-        /// <returns></returns>
         [HttpGet]
         public async Task<List<RoleItemResponse>> GetRolesAsync()
         {
