@@ -79,7 +79,7 @@ namespace PromoCodeFactory.WebHost.Controllers
         /// <param name="dto"></param>
         /// <returns></returns>
         [HttpPost]
-        public async Task<ActionResult> CreateEmployeeAsync(EmployeeRequest dto)
+        public async Task<ActionResult> CreateEmployeeAsync(EmployeeCreateDto dto)
         {
             var employee = new Employee()
             {

@@ -11,7 +11,7 @@ namespace PromoCodeFactory.Core.Domain.Administration
 
         public string Email { get; set; }
 
-        public List<Role> Roles { get; set; }
+        public List<Role> Roles { get; set; } = new List<Role>();
 
         public int AppliedPromocodesCount { get; set; }
     }

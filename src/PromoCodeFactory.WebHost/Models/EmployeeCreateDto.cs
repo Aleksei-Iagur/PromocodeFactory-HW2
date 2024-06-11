@@ -1,9 +1,6 @@
-﻿using PromoCodeFactory.Core.Domain.Administration;
-using System.Collections.Generic;
-
-namespace PromoCodeFactory.WebHost.Models
+﻿namespace PromoCodeFactory.WebHost.Models
 {
-    public class EmployeeRequest
+    public class EmployeeCreateDto
     {
         public string FirstName { get; set; }
         public string LastName { get; set; }
