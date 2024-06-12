@@ -70,5 +70,59 @@ namespace PromoCodeFactory.WebHost.Controllers
 
             return employeeModel;
         }
+
+        /// <summary>
+        /// Создать сотрудника
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        [HttpPost]
+        public async Task<ActionResult<EmployeeResponse>> CreateEmployeeAsync(Employee model)
+        {
+            var entity =  await _employeeRepository.Create(model);
+
+            return new EmployeeResponse(entity);
+        }
+
+        /// <summary>
+        /// Обновить сотрудника
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        [HttpPut]
+        public async Task<ActionResult<EmployeeResponse>> UpdateEmployeeAsync(Employee model)
+        {
+            var entity = await _employeeRepository.Update(model);
+
+            return new EmployeeResponse(entity);
+        }
+
+        /// <summary>
+        /// Обновить сотрудника
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        [HttpPut]
+        [Route("{id:guid}")]
+        public async Task<ActionResult<EmployeeShortResponse>> UpdateEmployeeAsync(Guid id, Employee model)
+        {
+            var entity = await _employeeRepository.Update(id, model);
+
+            return new EmployeeShortResponse(entity);
+        }
+
+        /// <summary>
+        /// Удаление сотрудника
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        [HttpDelete]
+        [Route("{id:guid}")]
+        public async Task<ActionResult> Remove(Guid id)
+        {
+            await _employeeRepository.Remove(id);
+
+            return Ok();
+        }
     }
 }
