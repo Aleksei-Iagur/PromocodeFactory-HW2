@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
@@ -70,5 +71,50 @@ namespace PromoCodeFactory.WebHost.Controllers
 
             return employeeModel;
         }
+
+        /// <summary>
+        /// Создать сотрудника
+        /// </summary>
+        /// <param name="employee">Сущность сотрудника</param>
+        /// <returns></returns>
+        [Description]
+        [HttpPost]
+        public async Task<IActionResult> CreateEmployeeAsync(Employee employee)
+        {
+            var entity = await _employeeRepository.CreateAsync(employee);
+
+            return Ok(entity);
+        }
+
+        /// <summary>
+        /// Обновить сотрудника
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        [HttpPut]
+        [Route("{id:guid}")]
+        public async Task<ActionResult<EmployeeShortResponse>> UpdateEmployeeAsync(Guid id, Employee model)
+        {
+            var entity = await _employeeRepository.UpdateAsync(id, model);
+
+            return Ok(entity);
+        }
+
+        /// <summary>
+        /// Удаление сотрудника
+        /// </summary>
+        /// <param name="id">Идентификатов</param>
+        /// <returns></returns>
+        [Description]
+        [HttpDelete]
+        [Route("{id:guid}")]
+        public async Task<IActionResult> Remove(Guid id)
+        {
+
+            await _employeeRepository.RemoveAsync(id);
+
+            return Ok($"Cотрудник с id {id} удален");
+        }
+
     }
 }
