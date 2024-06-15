@@ -11,8 +11,10 @@
     </ItemGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\PromoCodeFactory.Contracts\PromoCodeFactory.Contracts.csproj" />
       <ProjectReference Include="..\PromoCodeFactory.Core\PromoCodeFactory.Core.csproj" />
       <ProjectReference Include="..\PromoCodeFactory.DataAccess\PromoCodeFactory.DataAccess.csproj" />
+      <ProjectReference Include="..\PromocodeFactory.Domain\PromocodeFactory.Domain.csproj" />
     </ItemGroup>
 
 </Project>
