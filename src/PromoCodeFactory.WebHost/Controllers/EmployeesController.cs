@@ -1,14 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using PromoCodeFactory.Core.Abstractions.Repositories;
-using PromoCodeFactory.Core.Domain.Administration;
-using PromoCodeFactory.WebHost.Models;
-
-namespace PromoCodeFactory.WebHost.Controllers
+﻿namespace PromoCodeFactory.WebHost.Controllers
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Threading.Tasks;
+    using Microsoft.AspNetCore.Mvc;
+    using PromocodeFactory.Domain.Services.Interfaces;
+    using PromoCodeFactory.Contracts.Models;
+    using PromoCodeFactory.Core.Abstractions.Repositories;
+    using PromoCodeFactory.Core.Domain.Administration;
+    using PromoCodeFactory.WebHost.Models;
+
     /// <summary>
     /// Сотрудники
     /// </summary>
@@ -17,20 +19,21 @@ namespace PromoCodeFactory.WebHost.Controllers
     public class EmployeesController : ControllerBase
     {
         private readonly IRepository<Employee> _employeeRepository;
+        private readonly IEmployeeServices _employeeServices;
 
-        public EmployeesController(IRepository<Employee> employeeRepository)
+        public EmployeesController(IRepository<Employee> employeeRepository, IEmployeeServices employeeServices)
         {
             _employeeRepository = employeeRepository;
+            _employeeServices = employeeServices;
         }
 
         /// <summary>
-        /// Получить данные всех сотрудников
+        ///     Получить данные всех сотрудников
         /// </summary>
-        /// <returns></returns>
         [HttpGet]
         public async Task<List<EmployeeShortResponse>> GetEmployeesAsync()
         {
-            var employees = await _employeeRepository.GetAllAsync();
+            var employees = await _employeeServices.GetEmployeesAsync();
 
             var employeesModelList = employees.Select(x =>
                 new EmployeeShortResponse()
@@ -44,13 +47,12 @@ namespace PromoCodeFactory.WebHost.Controllers
         }
 
         /// <summary>
-        /// Получить данные сотрудника по Id
+        ///     Получить данные сотрудника по Id
         /// </summary>
-        /// <returns></returns>
         [HttpGet("{id:guid}")]
         public async Task<ActionResult<EmployeeResponse>> GetEmployeeByIdAsync(Guid id)
         {
-            var employee = await _employeeRepository.GetByIdAsync(id);
+            var employee = await _employeeServices.GetEmployeeByUuid(id);
 
             if (employee == null)
                 return NotFound();
@@ -69,6 +71,51 @@ namespace PromoCodeFactory.WebHost.Controllers
             };
 
             return employeeModel;
+        }
+
+        /// <summary>
+        ///     Создание сотрудника в БД
+        /// </summary>
+        /// <param name="createEmployeeRequest">Реквест с данными на создание сотрудника в бд</param>
+        [HttpPost("create")]
+        public async Task<ActionResult<Guid>> CreateEmployeeAsync([FromBody] CreateEmployeeRequest createEmployeeRequest)
+        {
+            return await _employeeServices.CreateEmployee(createEmployeeRequest);
+        }
+
+        /// <summary>
+        ///     Обновление даных сотрудника в БД
+        /// </summary>
+        /// <param name="updateEmployeeRequest">Реквест с обновленными данными сотрудника</param>
+        [HttpPut("update")]
+        public async Task<ActionResult<Guid>> CreateEmployeeAsync([FromBody] UpdateEmployeeRequest updateEmployeeRequest)
+        {
+            try
+            {
+                await _employeeServices.UpdateEmployee(updateEmployeeRequest);
+                return Ok();
+            }
+            catch(Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        /// <summary>
+        ///     Удаление данных сотрудника в БД
+        /// </summary>
+        [HttpDelete("delete/{id:guid}")]
+        public ActionResult DeleteEmployeeAsync(Guid id)
+        {
+            try
+            {
+                _employeeServices.DeleteEmployee(id);
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
     }
 }
