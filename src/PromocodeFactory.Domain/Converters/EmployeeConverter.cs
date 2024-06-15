@@ -26,6 +26,6 @@
                 Email = createEmployeeRequest.Email,
                 AppliedPromocodesCount = createEmployeeRequest.AppliedPromocodesCount
             };
-        }
+        } 
     }
 }

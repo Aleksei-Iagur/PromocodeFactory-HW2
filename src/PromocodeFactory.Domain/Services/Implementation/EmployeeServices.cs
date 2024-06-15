@@ -21,10 +21,19 @@
             _rolesRepository = rolesRepository;
         }
 
+        public async Task<IEnumerable<Employee>> GetEmployeesAsync()
+        {
+            return await _employeeRepository.GetAllAsync();
+        }
+
+        public async Task<Employee> GetEmployeeByUuid(Guid guid)
+        {
+            return await _employeeRepository.GetByIdAsync(guid);
+        }
+
         public async Task<Guid> CreateEmployee(CreateEmployeeRequest createEmployeeRequest)
         {
             var newEmployee = EmployeeConverter.CreatreConvert(createEmployeeRequest);
-
             
             var includedRoles = await GetRolesForEmployeeAsync(createEmployeeRequest.RolesGuid);
 

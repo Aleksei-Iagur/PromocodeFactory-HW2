@@ -33,7 +33,7 @@
         [HttpGet]
         public async Task<List<EmployeeShortResponse>> GetEmployeesAsync()
         {
-            var employees = await _employeeRepository.GetAllAsync();
+            var employees = await _employeeServices.GetEmployeesAsync();
 
             var employeesModelList = employees.Select(x =>
                 new EmployeeShortResponse()
@@ -52,7 +52,7 @@
         [HttpGet("{id:guid}")]
         public async Task<ActionResult<EmployeeResponse>> GetEmployeeByIdAsync(Guid id)
         {
-            var employee = await _employeeRepository.GetByIdAsync(id);
+            var employee = await _employeeServices.GetEmployeeByUuid(id);
 
             if (employee == null)
                 return NotFound();
