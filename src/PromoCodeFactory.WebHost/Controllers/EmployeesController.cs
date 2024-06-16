@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using PromoCodeFactory.Core.Abstractions.Repositories;
@@ -69,6 +70,47 @@ namespace PromoCodeFactory.WebHost.Controllers
             };
 
             return employeeModel;
+        }
+
+        /// <summary>
+        /// Добавить сотрудника
+        /// </summary>
+        /// <returns>Id созданного сотрудника</returns>
+        [HttpPost]
+        public async Task<IActionResult> CreateAsync(Employee employee)
+        {
+            var id = await _employeeRepository.CreateAsync(employee);
+            return Ok(id);
+        }
+
+        /// <summary>
+        /// Обновить данные сотрудника
+        /// </summary>
+        /// <returns></returns>
+        [HttpPatch]
+        public async Task UpdateAsync(Employee employee)
+        {
+            var isChanged = await _employeeRepository.UpdateAsync(employee);
+            if (!isChanged)
+            { // можно отдать и конкретную ошибку, но такой задачи пока нет
+                base.Response.StatusCode = (int)HttpStatusCode.BadRequest;
+            }
+            base.Response.StatusCode = (int)HttpStatusCode.NoContent;
+        }
+
+        /// <summary>
+        /// Удалить сотрудника
+        /// </summary>
+        /// <returns></returns>
+        [HttpDelete("{id}")]
+        public async Task DeleteAsync(Guid id)
+        {
+            var isDeleted = await _employeeRepository.DeleteAsync(id);
+            if (!isDeleted)
+            {
+                base.Response.StatusCode = (int)HttpStatusCode.BadRequest;
+            }
+            base.Response.StatusCode = (int)HttpStatusCode.NoContent;
         }
     }
 }
