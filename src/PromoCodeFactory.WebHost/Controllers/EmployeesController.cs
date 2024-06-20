@@ -75,12 +75,21 @@ namespace PromoCodeFactory.WebHost.Controllers
         /// <summary>
         /// Создать сотрудника
         /// </summary>
-        /// <param name="employee">Сущность сотрудника</param>
+        /// <param name="employeeCreate">Сущность сотрудника</param>
         /// <returns></returns>
         [Description]
         [HttpPost]
-        public async Task<IActionResult> CreateEmployeeAsync(Employee employee)
+        public async Task<IActionResult> CreateEmployeeAsync(EmployeeCreate employeeCreate)
         {
+            var employee = new Employee()
+            {
+                FirstName = employeeCreate.FirstName,
+                LastName = employeeCreate.LastName,
+                Email = employeeCreate.Email,
+                Roles = employeeCreate.Roles,
+                AppliedPromocodesCount = employeeCreate.AppliedPromocodesCount
+            };
+
             var entity = await _employeeRepository.CreateAsync(employee);
 
             return Ok(entity);
@@ -89,13 +98,22 @@ namespace PromoCodeFactory.WebHost.Controllers
         /// <summary>
         /// Обновить сотрудника
         /// </summary>
-        /// <param name="model"></param>
+        /// <param name="employeeUpdate"></param>
         /// <returns></returns>
         [HttpPut]
         [Route("{id:guid}")]
-        public async Task<ActionResult<EmployeeShortResponse>> UpdateEmployeeAsync(Guid id, Employee model)
+        public async Task<ActionResult<EmployeeShortResponse>> UpdateEmployeeAsync(Guid id, EmployeeUpdate employeeUpdate)
         {
-            var entity = await _employeeRepository.UpdateAsync(id, model);
+            var employee = new Employee()
+            {
+                FirstName = employeeUpdate.FirstName,
+                LastName = employeeUpdate.LastName,
+                Email = employeeUpdate.Email,
+                Roles = employeeUpdate.Roles,
+                AppliedPromocodesCount = employeeUpdate.AppliedPromocodesCount
+            };
+
+            var entity = await _employeeRepository.UpdateAsync(id, employee);
 
             return Ok(entity);
         }

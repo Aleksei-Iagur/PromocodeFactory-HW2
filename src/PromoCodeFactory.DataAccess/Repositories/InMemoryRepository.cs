@@ -50,6 +50,7 @@ namespace PromoCodeFactory.DataAccess.Repositories
         {
             var entity = Data.FirstOrDefault(x => x.Id == id);
 
+
             if (entity == null)
                 throw new Exception(NOT_FOUND_MESSAGE_ERROR);
 
