@@ -98,6 +98,7 @@ namespace PromoCodeFactory.WebHost.Controllers
         /// <summary>
         /// Обновить сотрудника
         /// </summary>
+        /// <param name="id"></param>
         /// <param name="employeeUpdate"></param>
         /// <returns></returns>
         [HttpPut]
@@ -131,7 +132,7 @@ namespace PromoCodeFactory.WebHost.Controllers
 
             await _employeeRepository.RemoveAsync(id);
 
-            return Ok($"Cотрудник с id {id} удален");
+            return NoContent();
         }
 
     }
