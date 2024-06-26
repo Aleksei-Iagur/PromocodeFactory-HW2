@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
@@ -70,5 +71,69 @@ namespace PromoCodeFactory.WebHost.Controllers
 
             return employeeModel;
         }
+
+        /// <summary>
+        /// Создать сотрудника
+        /// </summary>
+        /// <param name="employeeCreate">Сущность сотрудника</param>
+        /// <returns></returns>
+        [Description]
+        [HttpPost]
+        public async Task<IActionResult> CreateEmployeeAsync(EmployeeCreate employeeCreate)
+        {
+            var employee = new Employee()
+            {
+                FirstName = employeeCreate.FirstName,
+                LastName = employeeCreate.LastName,
+                Email = employeeCreate.Email,
+                Roles = employeeCreate.Roles,
+                AppliedPromocodesCount = employeeCreate.AppliedPromocodesCount
+            };
+
+            var entity = await _employeeRepository.CreateAsync(employee);
+
+            return Ok(entity);
+        }
+
+        /// <summary>
+        /// Обновить сотрудника
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="employeeUpdate"></param>
+        /// <returns></returns>
+        [HttpPut]
+        [Route("{id:guid}")]
+        public async Task<ActionResult<EmployeeShortResponse>> UpdateEmployeeAsync(Guid id, EmployeeUpdate employeeUpdate)
+        {
+            var employee = new Employee()
+            {
+                FirstName = employeeUpdate.FirstName,
+                LastName = employeeUpdate.LastName,
+                Email = employeeUpdate.Email,
+                Roles = employeeUpdate.Roles,
+                AppliedPromocodesCount = employeeUpdate.AppliedPromocodesCount
+            };
+
+            var entity = await _employeeRepository.UpdateAsync(id, employee);
+
+            return Ok(entity);
+        }
+
+        /// <summary>
+        /// Удаление сотрудника
+        /// </summary>
+        /// <param name="id">Идентификатов</param>
+        /// <returns></returns>
+        [Description]
+        [HttpDelete]
+        [Route("{id:guid}")]
+        public async Task<IActionResult> Remove(Guid id)
+        {
+
+            await _employeeRepository.RemoveAsync(id);
+
+            return NoContent();
+        }
+
     }
 }

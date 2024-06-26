@@ -21,6 +21,30 @@ namespace PromoCodeFactory.DataAccess.Data
                 },
                 AppliedPromocodesCount = 5
             },
+             new Employee()
+            {
+                Id = Guid.Parse("fd1003d0-ae66-4560-930d-caae0575203e"),
+                Email = "new@somemail.ru",
+                FirstName = "Никита",
+                LastName = "Сергеев",
+                Roles = new List<Role>()
+                {
+                    Roles.FirstOrDefault(x => x.Name == "Admin")
+                },
+                AppliedPromocodesCount = 5
+            },
+              new Employee()
+            {
+                Id = Guid.Parse("5ef082a7-1902-44bd-af82-470d5329b2ce"),
+                Email = "oleg@somemail.ru",
+                FirstName = "Олег",
+                LastName = "Сергеев",
+                Roles = new List<Role>()
+                {
+                    Roles.FirstOrDefault(x => x.Name == "Admin")
+                },
+                AppliedPromocodesCount = 5
+            },
             new Employee()
             {
                 Id = Guid.Parse("f766e2bf-340a-46ea-bff3-f1700b435895"),
