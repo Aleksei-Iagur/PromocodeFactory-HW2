@@ -28,6 +28,7 @@ namespace PromoCodeFactory.DataAccess.Repositories
 
         public Task AddAsync(T entity)
         {
+            Data.Add(entity);
             return Task.CompletedTask;
         }
     }
