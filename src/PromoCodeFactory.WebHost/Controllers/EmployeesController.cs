@@ -70,5 +70,17 @@ namespace PromoCodeFactory.WebHost.Controllers
 
             return employeeModel;
         }
+
+        /// <summary>
+        /// Получить все полные имена сотрудников
+        /// </summary>
+        /// <returns>Список полных имен сотрудников</returns>
+        [HttpGet("fullnames")]
+        public async Task<ActionResult<List<string>>> GetEmployeeFullNamesAsync()
+        {
+            var employees = await _employeeRepository.GetAllAsync();
+            var fullNames = employees.Select(x => x.FullName).ToList();
+            return fullNames;
+        }
     }
 }

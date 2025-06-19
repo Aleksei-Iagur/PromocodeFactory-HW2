@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
@@ -13,7 +14,7 @@ namespace PromoCodeFactory.WebHost.Controllers
     /// </summary>
     [ApiController]
     [Route("api/v1/[controller]")]
-    public class RolesController
+    public class RolesController : ControllerBase
     {
         private readonly IRepository<Role> _rolesRepository;
 
@@ -40,6 +41,31 @@ namespace PromoCodeFactory.WebHost.Controllers
                 }).ToList();
 
             return rolesModelList;
+        }
+
+        /// <summary>
+        /// Создать новую роль
+        /// </summary>
+        /// <param name="request">Данные новой роли</param>
+        /// <returns>Созданная роль</returns>
+        [HttpPost]
+        public async Task<ActionResult<RoleItemResponse>> CreateRoleAsync([FromBody] CreateRoleRequest request)
+        {
+            var role = new Role
+            {
+                Id = Guid.NewGuid(),
+                Name = request.Name,
+                Description = request.Description
+            };
+
+            await _rolesRepository.AddAsync(role);
+
+            return new RoleItemResponse
+            {
+                Id = role.Id,
+                Name = role.Name,
+                Description = role.Description
+            };
         }
     }
 }
